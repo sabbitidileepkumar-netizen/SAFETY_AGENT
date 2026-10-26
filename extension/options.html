@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SafeNest settings</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main class="settings-card">
+      <p class="eyebrow">SafeNest</p>
+      <h1>Settings</h1>
+      <p>Set the URL of your SafeNest backend. For local development, keep the default.</p>
+      <form id="settings-form">
+        <label for="backend-url">Backend URL</label>
+        <input id="backend-url" name="backend-url" type="url" required spellcheck="false" autocomplete="off">
+        <button type="submit">Save settings</button>
+      </form>
+      <p id="status" role="status"></p>
+      <hr>
+      <button id="clear-remembered" class="secondary" type="button">Clear remembered Allow decisions</button>
+      <p id="clear-status" role="status"></p>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

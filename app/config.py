@@ -39,6 +39,7 @@ class Settings:
     request_timeout_seconds: float = 4.0
     max_redirect_hops: int = 5
     database_path: str = "./safenest_cache.db"
+    cors_allowed_origins: str = "*"
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -60,4 +61,5 @@ class Settings:
             ),
             max_redirect_hops=_as_int(os.getenv("MAX_REDIRECT_HOPS"), 5, 1),
             database_path=os.getenv("DATABASE_PATH", "./safenest_cache.db"),
+            cors_allowed_origins=os.getenv("CORS_ALLOWED_ORIGINS", "*"),
         )

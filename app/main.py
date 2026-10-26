@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.checker import Checker
 from app.config import Settings
@@ -13,6 +14,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     checker = Checker(active_settings)
     limiter = RateLimiter(active_settings.request_limit_per_minute)
     api = FastAPI(title="SafeNest Link Checker", version="0.1.0")
+    allowed_origins = [
+        origin.strip()
+        for origin in active_settings.cors_allowed_origins.split(",")
+        if origin.strip()
+    ] or ["*"]
+    api.add_middleware(
+        CORSMiddleware,
+        allow_origins=allowed_origins,
+        allow_credentials=False,
+        allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type"],
+    )
 
     @api.get("/health")
     def health() -> dict[str, str]:

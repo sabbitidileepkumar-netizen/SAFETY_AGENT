@@ -34,6 +34,20 @@ def test_health_and_safe_url() -> None:
     assert body["explanation"]["source"] == "fallback"
 
 
+def test_extension_origin_can_call_check() -> None:
+    client = make_client()
+    response = client.options(
+        "/check",
+        headers={
+            "Origin": "chrome-extension://test-extension",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "*"
+
+
 def test_invalid_payload_is_rejected() -> None:
     client = make_client()
     assert client.post("/check", json={}).status_code == 422

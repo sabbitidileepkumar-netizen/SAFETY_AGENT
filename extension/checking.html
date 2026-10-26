@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SafeNest is checking</title>
+    <link rel="stylesheet" href="checking.css">
+  </head>
+  <body>
+    <main class="card" aria-live="polite">
+      <p class="eyebrow">SafeNest</p>
+      <h1 id="heading">Checking this link…</h1>
+      <p id="status">We are checking it before opening the page.</p>
+      <div id="progress" class="spinner" aria-label="Checking"></div>
+
+      <section id="result" class="hidden" aria-label="Safety result">
+        <div id="risk-meter" class="risk-meter" aria-label="Risk level">
+          <span data-risk="Safe">Safe</span>
+          <span data-risk="Careful">Careful</span>
+          <span data-risk="Danger">Danger</span>
+        </div>
+        <p id="reason" class="reason"></p>
+        <p id="english" class="explanation"></p>
+        <p id="telugu" class="explanation telugu" lang="te"></p>
+        <p id="danger-note" class="danger-note hidden"></p>
+        <label id="remember-row" class="remember-row hidden">
+          <input id="remember" type="checkbox">
+          Remember my Allow decision for this site
+        </label>
+        <div class="actions">
+          <button id="close" class="secondary" type="button">Close</button>
+          <button id="allow" class="primary" type="button">Allow</button>
+        </div>
+        <div class="voice-actions">
+          <button id="speak-english" class="voice" type="button">🔊 English</button>
+          <button id="speak-telugu" class="voice" type="button">🔊 తెలుగు</button>
+        </div>
+      </section>
+
+      <section id="error" class="hidden" aria-label="Checking error">
+        <p id="error-text"></p>
+        <div class="actions">
+          <button id="error-close" class="secondary" type="button">Close</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="checking.js"></script>
+  </body>
+</html>

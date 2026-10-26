@@ -1,4 +1,4 @@
-# SafeNest — Phase 1–2 link checker
+# SafeNest — Phases 1–3 link protection
 
 SafeNest is a focused first version for Indian families: a user pastes or
 shares a URL/SMS message, and the backend returns a deterministic `Safe`,
@@ -20,6 +20,26 @@ Then send a request to `http://127.0.0.1:8000/check`:
 ```
 
 The service also exposes `GET /health`.
+
+## Phase 3 Chrome extension
+
+Load the `extension/` folder in Chrome at `chrome://extensions` with
+**Developer mode** enabled and **Load unpacked**. Open the extension's options
+page and confirm the backend URL (`http://127.0.0.1:8000` for local use).
+
+For every top-level HTTP(S) navigation, the extension sends the URL to the
+backend before opening it. Safe links open silently. Careful links show the
+reason with Close/Allow controls. Danger links stay blocked and offer only a
+one-time **Open anyway** override with a clear warning.
+
+Warnings can be spoken in English (`en-IN`) or Telugu (`te-IN`) through browser
+speech synthesis. Careful Allow decisions can be remembered by site origin in
+Chrome sync storage. Danger overrides are intentionally not remembered.
+
+The extension keeps the original URL in `chrome.storage.session` only while a
+check is pending, passes it to the backend without opening it first, and uses
+text-only DOM updates for returned data. If the backend is unavailable, it
+fails closed to a Careful screen instead of opening the page silently.
 
 The `/check` response now includes:
 
@@ -44,6 +64,8 @@ The `/check` response now includes:
   Cache keys are SHA-256 digests; request contents are not logged or stored.
 - Gemini-written English and Telugu explanations, with a deterministic local
   fallback when no key is configured or the model response is invalid.
+- Chrome Manifest V3 navigation interception, warning UI, voice controls, and
+  remembered Careful Allow decisions.
 
 India scam indicators live in `app/india_rules.py` so they can be reviewed and
 edited without changing the decision workflow.
@@ -81,6 +103,7 @@ and harmless text. They are not malware or live scam targets.
 ```text
 .venv\Scripts\python.exe -m pytest -q
 .venv\Scripts\python.exe scripts/evaluate_samples.py
+node --test extension/tests/*.test.js
 ```
 
 The evaluator prints accuracy, over-warning false positives, and

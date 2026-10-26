@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "SafeNest Link Guard",
+  "version": "0.3.0",
+  "description": "Pauses links, checks them with SafeNest, and explains the risk in English and Telugu.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "SafeNest Link Guard"
+  },
+  "options_page": "options.html"
+}
