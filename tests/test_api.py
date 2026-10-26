@@ -14,6 +14,7 @@ def make_client(limit: int = 30) -> TestClient:
             Settings(
                 enable_network_lookups=False,
                 request_limit_per_minute=limit,
+                database_path=":memory:",
             )
         )
     )
@@ -28,6 +29,9 @@ def test_health_and_safe_url() -> None:
     assert body["risk"] == "Safe"
     assert body["main_reason"]
     assert isinstance(body["signals"], list)
+    assert body["explanation"]["english"]
+    assert body["explanation"]["telugu"]
+    assert body["explanation"]["source"] == "fallback"
 
 
 def test_invalid_payload_is_rejected() -> None:
@@ -46,6 +50,8 @@ def test_prompt_injection_is_untrusted_and_still_danger() -> None:
     assert response.status_code == 200
     assert response.json()["risk"] == "Danger"
     assert response.json()["signals"][0]["source"] == "india_rules"
+    assert response.json()["explanation"]["source"] == "fallback"
+    assert "Danger" in response.json()["explanation"]["english"]
 
 
 def test_lookalike_bank_link_is_danger() -> None:

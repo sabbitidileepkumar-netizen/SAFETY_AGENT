@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from app.config import Settings
+from app.explanation import ExplanationService
 from app.models import CheckRequest, CheckResponse
 from app.risk import Analysis, UrlEvidence, analyze, extract_urls, normalize_url
 from app.services.external import ExternalLookupService
@@ -14,6 +15,7 @@ class Checker:
 
     def __post_init__(self) -> None:
         self.external = ExternalLookupService(self.settings)
+        self.explainer = ExplanationService(self.settings)
 
     def _urls(self, request: CheckRequest) -> list[str]:
         if request.url:
@@ -66,4 +68,5 @@ class Checker:
         urls = self._urls(request)
         preliminary = analyze(request.url, request.text)
         evidence = self._evidence(urls, preliminary)
-        return analyze(request.url, request.text, evidence).response
+        response = analyze(request.url, request.text, evidence).response
+        return response.model_copy(update={"explanation": self.explainer.explain(response)})

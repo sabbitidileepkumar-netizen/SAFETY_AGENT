@@ -39,8 +39,15 @@ class Signal(BaseModel):
     source: str
 
 
+class BilingualExplanation(BaseModel):
+    english: str = Field(min_length=1, max_length=320)
+    telugu: str = Field(min_length=1, max_length=320)
+    source: Literal["gemini", "fallback"]
+
+
 class CheckResponse(BaseModel):
     risk: RiskLevel
     confidence: float = Field(ge=0.0, le=1.0)
     main_reason: str
     signals: list[Signal]
+    explanation: BilingualExplanation | None = None

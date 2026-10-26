@@ -30,6 +30,9 @@ def _as_float(value: str | None, default: float, minimum: float) -> float:
 class Settings:
     google_safe_browsing_api_key: str | None = None
     virustotal_api_key: str | None = None
+    gemini_api_key: str | None = None
+    gemini_model: str = "gemini-2.0-flash"
+    enable_gemini_explanations: bool = True
     enable_network_lookups: bool = True
     request_limit_per_minute: int = 30
     cache_ttl_seconds: int = 900
@@ -42,6 +45,11 @@ class Settings:
         return cls(
             google_safe_browsing_api_key=os.getenv("GOOGLE_SAFE_BROWSING_API_KEY") or None,
             virustotal_api_key=os.getenv("VIRUSTOTAL_API_KEY") or None,
+            gemini_api_key=os.getenv("GEMINI_API_KEY") or None,
+            gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
+            enable_gemini_explanations=_as_bool(
+                os.getenv("ENABLE_GEMINI_EXPLANATIONS"), True
+            ),
             enable_network_lookups=_as_bool(os.getenv("ENABLE_NETWORK_LOOKUPS"), True),
             request_limit_per_minute=_as_int(
                 os.getenv("REQUEST_LIMIT_PER_MINUTE"), 30, 1
