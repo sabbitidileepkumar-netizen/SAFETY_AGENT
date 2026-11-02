@@ -64,9 +64,17 @@ class Checker:
             )
         return tuple(evidence)
 
-    def check(self, request: CheckRequest) -> CheckResponse:
+    def check(self, request: CheckRequest, allow_sms_to_gemini: bool = False) -> CheckResponse:
         urls = self._urls(request)
         preliminary = analyze(request.url, request.text)
         evidence = self._evidence(urls, preliminary)
         response = analyze(request.url, request.text, evidence).response
-        return response.model_copy(update={"explanation": self.explainer.explain(response)})
+        return response.model_copy(
+            update={
+                "explanation": self.explainer.explain(
+                    response,
+                    submitted_text=request.text,
+                    allow_sms_to_gemini=allow_sms_to_gemini,
+                )
+            }
+        )

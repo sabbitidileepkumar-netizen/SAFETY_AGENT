@@ -40,6 +40,14 @@ class Settings:
     max_redirect_hops: int = 5
     database_path: str = "./safenest_cache.db"
     cors_allowed_origins: str = "*"
+    session_ttl_seconds: int = 60 * 60 * 24 * 30
+    free_checks_per_day: int = 10
+    razorpay_key_id: str | None = None
+    razorpay_key_secret: str | None = None
+    razorpay_webhook_secret: str | None = None
+    razorpay_api_base_url: str = "https://api.razorpay.com/v1"
+    razorpay_enabled: bool = False
+    payments_demo_mode: bool = False
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -62,4 +70,16 @@ class Settings:
             max_redirect_hops=_as_int(os.getenv("MAX_REDIRECT_HOPS"), 5, 1),
             database_path=os.getenv("DATABASE_PATH", "./safenest_cache.db"),
             cors_allowed_origins=os.getenv("CORS_ALLOWED_ORIGINS", "*"),
+            session_ttl_seconds=_as_int(
+                os.getenv("SESSION_TTL_SECONDS"), 60 * 60 * 24 * 30, 3600
+            ),
+            free_checks_per_day=_as_int(os.getenv("FREE_CHECKS_PER_DAY"), 10, 1),
+            razorpay_key_id=os.getenv("RAZORPAY_KEY_ID") or None,
+            razorpay_key_secret=os.getenv("RAZORPAY_KEY_SECRET") or None,
+            razorpay_webhook_secret=os.getenv("RAZORPAY_WEBHOOK_SECRET") or None,
+            razorpay_api_base_url=os.getenv(
+                "RAZORPAY_API_BASE_URL", "https://api.razorpay.com/v1"
+            ).rstrip("/"),
+            razorpay_enabled=_as_bool(os.getenv("RAZORPAY_ENABLED"), False),
+            payments_demo_mode=_as_bool(os.getenv("PAYMENTS_DEMO_MODE"), False),
         )

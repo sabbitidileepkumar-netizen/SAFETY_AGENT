@@ -7,3 +7,8 @@ node_modules/
 .pytest_cache/
 *.db
 *.sqlite3
+*.zip
+isolation_chamber_runs/
+private_space_cache/
+sandbox_staging/
+test_pytest_ps_cache/

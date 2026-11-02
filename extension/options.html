@@ -14,6 +14,8 @@
       <form id="settings-form">
         <label for="backend-url">Backend URL</label>
         <input id="backend-url" name="backend-url" type="url" required spellcheck="false" autocomplete="off">
+        <label for="user-token">Logged-in user token (optional; stored in browser sync settings)</label>
+        <input id="user-token" name="user-token" type="password" spellcheck="false" autocomplete="off">
         <button type="submit">Save settings</button>
       </form>
       <p id="status" role="status"></p>

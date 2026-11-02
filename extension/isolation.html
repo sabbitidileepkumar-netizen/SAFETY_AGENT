@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; frame-src http: https:;">
+    <title>SafeNest restricted viewer</title>
+    <link rel="stylesheet" href="checking.css">
+    <style>body{display:block}.card{margin:16px auto;width:calc(100% - 32px);max-width:none;padding:16px}iframe{width:100%;height:70vh;border:1px solid #94a3b8;background:white}button{margin:8px 6px 8px 0}</style>
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">SafeNest — RESTRICTED VIEWER</p>
+      <h1>Careful link opened with page scripts disabled</h1>
+      <p id="reason"><strong>Reason:</strong></p>
+      <p id="english"></p>
+      <p id="telugu" lang="te"></p>
+      <p>The embedded page cannot use scripts, forms, popups, downloads, or top-level navigation in this viewer. Avoid entering credentials or payment details.</p>
+      <button id="speak-en" class="primary" type="button">🔊 English</button>
+      <button id="speak-te" class="secondary" type="button">🔊 తెలుగు</button>
+      <p id="voice-status" role="status"></p>
+      <button id="close" class="secondary" type="button">Close viewer</button>
+      <iframe id="page" title="Restricted web page" sandbox="" referrerpolicy="no-referrer"></iframe>
+    </main>
+    <script src="isolation.js"></script>
+  </body>
+</html>

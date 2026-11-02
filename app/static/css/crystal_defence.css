@@ -1,0 +1,30 @@
+/* GUARD AI — CRYSTAL DEFENCE (LIGHT THEME) */
+:root[data-theme="light"] {
+    --bg-base: #f1f5f9;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #f8fafc;
+    --bg-glass: rgba(255, 255, 255, 0.85);
+    --border-subtle: rgba(148, 163, 184, 0.25);
+    --border-accent: rgba(37, 99, 235, 0.35);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    
+    --accent-blue: #2563eb;
+    --accent-cyan: #0284c7;
+    --accent-violet: #6366f1;
+    --accent-purple: #7c3aed;
+    
+    --color-safe: #059669;
+    --color-careful: #d97706;
+    --color-danger: #dc2626;
+    --color-malicious: #b91c1c;
+
+    --glow-cyan: 0 4px 20px rgba(2, 132, 199, 0.2);
+    --glow-violet: 0 4px 20px rgba(99, 102, 241, 0.2);
+    --glow-danger: 0 4px 20px rgba(220, 38, 38, 0.25);
+    
+    --glass-blur: blur(12px);
+    --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}

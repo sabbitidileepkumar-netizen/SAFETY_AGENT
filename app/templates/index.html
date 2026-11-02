@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guard AI — Cybersecurity Command Centre</title>
+    <link rel="stylesheet" href="/static/css/void_command.css">
+    <link rel="stylesheet" href="/static/css/crystal_defence.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+        <div class="brand-header">
+            <div class="brand-logo-shield">🛡️</div>
+            <div class="brand-text">
+                <h1>GUARD AI</h1>
+                <span>Enterprise Command</span>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <div class="nav-section-title">Core Operations</div>
+            <li class="nav-item active" data-view="soc">
+                <span class="nav-icon">⚡</span> Security Operations
+            </li>
+            <li class="nav-item" data-view="private-space">
+                <span class="nav-icon">🔒</span> Private Space
+            </li>
+            <li class="nav-item" data-view="isolation">
+                <span class="nav-icon">☣️</span> Isolation Chamber
+            </li>
+            <li class="nav-item" data-view="sandbox">
+                <span class="nav-icon">🔬</span> Sandbox Lab
+            </li>
+
+            <div class="nav-section-title">Cryptographic Engines</div>
+            <li class="nav-item" data-view="crypto">
+                <span class="nav-icon">🗝️</span> Cryptographic Maze
+            </li>
+            <li class="nav-item" data-view="blockchain">
+                <span class="nav-icon">⛓️</span> Blockchain Audit
+            </li>
+
+            <div class="nav-section-title">Intelligence & Governance</div>
+            <li class="nav-item" data-view="incidents">
+                <span class="nav-icon">📢</span> Informer Voice & Alerts
+            </li>
+            <li class="nav-item" data-view="emergency">
+                <span class="nav-icon">🧪</span> Emergency (SIMULATED)
+            </li>
+            <li class="nav-item" data-view="platform">
+                <span class="nav-icon">💻</span> Platform & Capabilities
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <span style="font-size:11px; color:var(--text-muted);">Theme:</span>
+            <div class="theme-switch-group">
+                <button class="theme-btn active" data-theme="dark">Dark</button>
+                <button class="theme-btn" data-theme="light">Light</button>
+                <button class="theme-btn" data-theme="system">Sys</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT -->
+    <main class="main-viewport">
+        <!-- TOP STATUS STRIP -->
+        <header class="top-status-strip">
+            <div class="status-badge-cluster">
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span>
+                    <span>System Status: <strong style="color:var(--color-safe)">OPERATIONAL</strong></span>
+                </div>
+                <div class="status-indicator" style="color:var(--text-secondary)">
+                    <span>Decisions: <strong id="stat-decisions-count">0</strong></span>
+                </div>
+                <div class="status-indicator" style="color:var(--text-secondary)">
+                    <span>Containments: <strong id="stat-containment-count">0</strong></span>
+                </div>
+                <div class="status-indicator" style="color:var(--text-secondary)">
+                    <span>Audit Records: <strong id="stat-audit-count">0</strong></span>
+                </div>
+            </div>
+            <div style="font-size:12px; font-family:monospace; color:var(--accent-cyan);">
+                AUTONOMOUS DEFENSE ACTIVE
+            </div>
+        </header>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 1: SECURITY OPERATIONS CENTER (SOC) -->
+        <!-- ============================================================== -->
+        <section id="view-soc" class="view-section active">
+            <!-- Hero Shield Card -->
+            <div class="glass-card hero-shield-card" style="margin-bottom:24px;">
+                <div class="hologram-shield-container">
+                    <div class="shield-radar-ring"></div>
+                    <div class="shield-inner-glow"></div>
+                    <div class="shield-icon">🛡️</div>
+                </div>
+                <h2 style="font-size:22px; font-weight:800; letter-spacing:1px; margin-bottom:6px;">CENTRAL SECURITY ORCHESTRATION</h2>
+                <p style="font-size:13px; color:var(--text-secondary); max-width:650px; margin-bottom:20px;">
+                    Controller AI actively coordinates autonomous agents, enforces isolation boundaries, and logs immutable cryptographic audit seals.
+                </p>
+
+                <!-- Interactive Triage Input -->
+                <div style="width:100%; max-width:760px;">
+                    <div class="input-group">
+                        <input id="triage-input" type="text" class="guard-input" placeholder="Test URL or SMS message (e.g. https://sbi-verify.example/kyc or OTP prompt)..." value="https://sbi-login.example/verify-otp">
+                        <button id="btn-triage-execute" class="btn-primary">Execute Triage</button>
+                    </div>
+                    <div id="triage-result" style="text-align:left;"></div>
+                </div>
+            </div>
+
+            <!-- Agent Ecosystem Status Grid -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3 class="card-title">🤖 Active Security Agent Ecosystem</h3>
+                    <span style="font-size:12px; color:var(--text-muted);">Real-time Backend Telemetry</span>
+                </div>
+                <div class="agent-grid">
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Controller AI</span>
+                            <span id="badge-agent-controller" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Central Orchestrator & Policy Enforcement</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Finder AI</span>
+                            <span id="badge-agent-finder" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Phishing, URLs & Lookalike Recon</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Defence AI</span>
+                            <span id="badge-agent-defence" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Cryptographic Shield & Cache Hygiene</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Offence AI</span>
+                            <span id="badge-agent-offence" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Defensive Containment & Active Isolation</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Informer AI</span>
+                            <span id="badge-agent-informer" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Multi-Lingual Voice & Incident Alerts</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Wi-Fi Agent</span>
+                            <span id="badge-agent-wifi" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Wireless & Network Interface Guard</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">Browser Agent</span>
+                            <span id="badge-agent-browser" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Navigation, CSP & Redirect Monitor</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">File Agent</span>
+                            <span id="badge-agent-file" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Filesystem, Downloads & Extensions</span>
+                    </div>
+
+                    <div class="agent-tile">
+                        <div class="agent-tile-top">
+                            <span class="agent-name">App Behavior</span>
+                            <span id="badge-agent-app_behavior" class="agent-badge badge-monitoring">MONITORING</span>
+                        </div>
+                        <span style="font-size:11px; color:var(--text-secondary)">Process Telemetry & Persistence Audit</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HIGH-IMPACT ACTIONS ARE SIMULATED AND REQUIRE A SERVER-SIDE APPROVAL -->
+        <section id="view-emergency" class="view-section">
+            <div class="glass-card" style="margin-bottom:20px; border:1px solid var(--color-danger);">
+                <div class="card-header">
+                    <h3 class="card-title">🧪 Emergency Controls — SIMULATED</h3>
+                    <span class="agent-badge" style="color:var(--color-danger);">SIMULATED ONLY</span>
+                </div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+                    These controls only record simulated lockdown and quarantine state. They do not change files, processes, or network settings. Each action needs a server-recorded approval from a logged-in user token.
+                </p>
+                <label for="emergency-session-token">Logged-in session token</label>
+                <input id="emergency-session-token" class="guard-input" type="password" autocomplete="off" placeholder="Bearer token from /api/auth/login" style="margin:6px 0 14px;">
+                <div class="grid-2">
+                    <div>
+                        <label for="emergency-action">Action</label>
+                        <select id="emergency-action" class="guard-input" style="margin:6px 0 12px;">
+                            <option value="LOCKDOWN">Simulate lockdown</option>
+                            <option value="RESET_LOCKDOWN">Simulate lockdown reset</option>
+                            <option value="QUARANTINE_FILE">Simulate file quarantine</option>
+                        </select>
+                        <label for="emergency-level">Lockdown level</label>
+                        <select id="emergency-level" class="guard-input" style="margin:6px 0 12px;">
+                            <option value="HEIGHTENED">HEIGHTENED</option>
+                            <option value="FULL_CONTAINMENT">FULL_CONTAINMENT</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="emergency-target">Target identifier (quarantine simulation)</label>
+                        <input id="emergency-target" class="guard-input" maxlength="512" style="margin:6px 0 12px;" placeholder="Example: report ID or SHA-256">
+                        <label for="emergency-reason">Reason</label>
+                        <input id="emergency-reason" class="guard-input" maxlength="500" style="margin:6px 0 12px;" value="User requested simulated response">
+                    </div>
+                </div>
+                <div class="actions" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+                    <button id="emergency-request" class="btn-primary" type="button">Request approval</button>
+                    <button id="emergency-approve" class="btn-secondary" type="button">Approve request</button>
+                    <button id="emergency-execute" class="btn-secondary" type="button">Run simulation</button>
+                    <button id="emergency-refresh" class="btn-secondary" type="button">Refresh status</button>
+                </div>
+                <label for="emergency-approval-id" style="display:block; margin-top:12px;">Approval request ID</label>
+                <input id="emergency-approval-id" class="guard-input" autocomplete="off" placeholder="Created by Request approval">
+                <pre id="emergency-result" role="status" aria-live="polite" style="white-space:pre-wrap; margin-top:12px;"></pre>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3 class="card-title">Privacy setting — SMS text sharing</h3>
+                </div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+                    SMS text is kept out of Gemini by default. Enable sharing only if you want redacted text sent for an explanation. Email, IP, payment-card, phone, and OTP-like values are redacted first.
+                </p>
+                <label style="display:flex; align-items:center; gap:8px;">
+                    <input id="allow-sms-gemini" type="checkbox">
+                    Allow redacted SMS text to be sent to Gemini for my account
+                </label>
+                <div class="actions" style="display:flex; gap:8px; margin-top:12px;">
+                    <button id="privacy-load" class="btn-secondary" type="button">Load my setting</button>
+                    <button id="privacy-save" class="btn-primary" type="button">Save setting</button>
+                </div>
+                <p id="privacy-result" role="status" aria-live="polite" style="font-size:12px; margin-top:10px;"></p>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 2: GUARD PRIVATE SPACE -->
+        <!-- ============================================================== -->
+        <section id="view-private-space" class="view-section">
+            <div class="disclaimer-box">
+                <span style="font-size:18px;">⚠️</span>
+                <div>
+                    <strong>IMPORTANT NOTICE ON PRIVATE BROWSING ANONYMITY:</strong>
+                    <p style="margin-top:2px;">
+                        Guard Private Space ensures local session isolation, separate temporary cookies, and zero shared authentication with normal browser sessions.
+                        However, Private Browsing does <strong>NOT</strong> conceal your IP address from your Internet Service Provider (ISP), network routers, or destination servers. For network-layer anonymity, route traffic through a trusted VPN or Tor.
+                    </p>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h3 class="card-title">🔒 Guard Private Space Browser</h3>
+                    <div style="display:flex; gap:10px;">
+                        <button id="btn-new-private-tab" class="btn-primary" style="font-size:12px;">+ Open Private Tab</button>
+                        <button id="btn-clear-private-space" class="btn-danger" style="font-size:12px;">Scrub All Sessions</button>
+                    </div>
+                </div>
+
+                <!-- Tabs header -->
+                <div id="private-tabs-header" style="margin-bottom:12px; display:flex; align-items:center; flex-wrap:wrap;">
+                    <!-- Dynamically populated tabs -->
+                </div>
+
+                <!-- Address Bar -->
+                <div class="input-group">
+                    <input id="private-url-input" type="text" class="guard-input" placeholder="Enter web URL (e.g. https://example.com)..." value="https://example.com">
+                    <button id="btn-private-nav" class="btn-primary">Navigate Securely</button>
+                </div>
+
+                <!-- Embedded sandboxed web viewer -->
+                <iframe id="private-browser-viewport" class="embedded-viewer-frame" sandbox="allow-same-origin allow-forms allow-scripts"></iframe>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 3: GUARD ISOLATION CHAMBER -->
+        <!-- ============================================================== -->
+        <section id="view-isolation" class="view-section">
+            <div class="grid-4" style="margin-bottom:20px;">
+                <div class="glass-card" style="padding:14px; text-align:center;">
+                    <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Filesystem Boundary</span>
+                    <p style="font-size:13px; font-weight:700; color:var(--color-safe); margin-top:4px;">Restricted (Ephemeral)</p>
+                </div>
+                <div class="glass-card" style="padding:14px; text-align:center;">
+                    <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Host Applications</span>
+                    <p style="font-size:13px; font-weight:700; color:var(--color-safe); margin-top:4px;">Blocked (No IPC/Spawn)</p>
+                </div>
+                <div class="glass-card" style="padding:14px; text-align:center;">
+                    <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Clipboard Access</span>
+                    <p style="font-size:13px; font-weight:700; color:var(--accent-cyan); margin-top:4px;">Sandboxed (Read Only)</p>
+                </div>
+                <div class="glass-card" style="padding:14px; text-align:center;">
+                    <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Egress Filtering</span>
+                    <p style="font-size:13px; font-weight:700; color:var(--color-safe); margin-top:4px;">Anti-SSRF (Private IP Block)</p>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h3 class="card-title">☣️ Launch Isolated Browsing Chamber</h3>
+                </div>
+                <div class="input-group">
+                    <input id="isolation-url-input" type="text" class="guard-input" placeholder="Submit suspicious URL for isolated containment..." value="https://example.com">
+                    <button id="btn-launch-isolation" class="btn-danger">Launch In Chamber</button>
+                </div>
+
+                <div class="table-container" style="margin-top:16px;">
+                    <table class="guard-table">
+                        <thead>
+                            <tr>
+                                <th>Session ID</th>
+                                <th>Target URL</th>
+                                <th>Health</th>
+                                <th>Filesystem Policy</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="isolation-sessions-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Isolated Output Frame -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3 class="card-title">🖥️ Isolated Chamber Live Viewport</h3>
+                </div>
+                <iframe id="isolation-viewer-frame" class="embedded-viewer-frame" sandbox="allow-same-origin"></iframe>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 4: GUARD SANDBOX LAB -->
+        <!-- ============================================================== -->
+        <section id="view-sandbox" class="view-section">
+            <div class="glass-card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h3 class="card-title">🔬 Guard Sandbox — File & Content Inspection Engine</h3>
+                    <span style="font-size:12px; color:var(--text-muted);">Non-Host Ephemeral Staging & YARA Analysis</span>
+                </div>
+
+                <div class="file-dropzone" onclick="document.getElementById('sandbox-file-input').click()">
+                    <span style="font-size:36px;">📁</span>
+                    <p style="font-weight:700; font-size:15px; margin-top:8px;">Drop suspicious file here or click to select</p>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Generates SHA-256, Shannon entropy, Windows Defender analysis, and safe sanitized preview</p>
+                    <input id="sandbox-file-input" type="file" style="display:none;">
+                </div>
+
+                <div id="sandbox-report-container" style="margin-top:20px;">
+                    <!-- Inspection report appears here -->
+                </div>
+            </div>
+
+            <!-- Recent Reports History -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3 class="card-title">📜 Recent File Inspection Reports</h3>
+                </div>
+                <div class="table-container">
+                    <table class="guard-table">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Filename</th>
+                                <th>Size</th>
+                                <th>Verdict</th>
+                                <th>Inspect</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sandbox-history-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 5: CRYPTOGRAPHIC MAZE -->
+        <!-- ============================================================== -->
+        <section id="view-crypto" class="view-section">
+            <div class="glass-card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h3 class="card-title">🗝️ Cryptographic Maze Security Studio</h3>
+                    <button id="btn-rotate-key" class="btn-secondary" style="font-size:12px;">Rotate Master Key</button>
+                </div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+                    <strong>Architecture:</strong> Layer 1 Perimeter Shield (AES-256-GCM Envelope) &bull; Layer 2 Compartment Maze (HKDF Segmentation) &bull; Layer 3 Core Vault (Ed25519 Signatures & Split-Secret Recovery).
+                </p>
+
+                <div class="grid-2">
+                    <!-- Seal Panel -->
+                    <div>
+                        <h4 style="font-size:13px; margin-bottom:8px;">Seal Data through Cryptographic Maze</h4>
+                        <textarea id="maze-plaintext-input" class="guard-input" style="height:90px; width:100%; font-family:monospace;" placeholder="Enter sensitive payload to encapsulate..."></textarea>
+                        <button id="btn-maze-seal" class="btn-primary" style="margin-top:8px; width:100%;">Encrypt & Seal Maze</button>
+                        <div id="maze-output-display" style="margin-top:12px;"></div>
+                    </div>
+
+                    <!-- Solve Panel -->
+                    <div>
+                        <h4 style="font-size:13px; margin-bottom:8px;">Navigate & Authenticate Maze</h4>
+                        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">
+                            Validates envelope wrapper, individual compartment segments, and Ed25519 digital signature seal.
+                        </p>
+                        <button id="btn-maze-solve" class="btn-secondary" style="width:100%;">Navigate Maze & Verify Integrity</button>
+                        <div id="maze-solve-display" style="margin-top:12px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Rotation Table -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3 class="card-title">🔑 Versioned Key Rotation History</h3>
+                    <span style="font-size:11px; color:var(--text-muted)">Raw keys are never logged or exposed</span>
+                </div>
+                <div class="table-container">
+                    <table class="guard-table">
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Key ID</th>
+                                <th>Status</th>
+                                <th>Fingerprint (Public SHA-256)</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="crypto-keys-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 6: BLOCKCHAIN & AUDIT REGISTRY -->
+        <!-- ============================================================== -->
+        <section id="view-blockchain" class="view-section">
+            <div class="glass-card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h3 class="card-title">⛓️ Immutable Blockchain & Hash-Chain Audit Ledger</h3>
+                    <div style="display:flex; gap:10px;">
+                        <button id="btn-verify-chain" class="btn-primary" style="font-size:12px;">Verify Entire Chain</button>
+                        <button id="btn-tamper-demo" class="btn-danger" style="font-size:12px;">Simulate Tampering Demo</button>
+                    </div>
+                </div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+                    Integrates <strong>Solidity Audit Smart Contract (AuditRegistry.sol)</strong> with Hardhat/Ethereum dev network and resilient <strong>Local Cryptographic Hash-Chain fallback</strong> with Ed25519 signatures. Zero user secrets stored on-chain.
+                </p>
+
+                <div id="blockchain-verify-result" style="margin-bottom:14px; font-size:13px;"></div>
+
+                <div class="table-container">
+                    <table class="guard-table">
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Record ID</th>
+                                <th>Event Type</th>
+                                <th>Data Hash (SHA-256)</th>
+                                <th>Tx / Block Hash</th>
+                                <th>Verification Tier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blockchain-records-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 7: INFORMER AI VOICE & INCIDENTS -->
+        <!-- ============================================================== -->
+        <section id="view-incidents" class="view-section">
+            <div class="glass-card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h3 class="card-title">📢 Informer AI Multi-Lingual Voice Notifications</h3>
+                </div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+                    Informer AI translates technical telemetry into spoken voice alerts for users and families in Indian English (en-IN) and Telugu (te-IN).
+                </p>
+
+                <div class="grid-2">
+                    <div class="glass-card" style="background:var(--bg-surface-elevated);">
+                        <h4 style="font-size:13px; margin-bottom:6px;">Sample English Alert</h4>
+                        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">
+                            "Guard AI Alert. Danger detected. The link imitates SBI on a different domain. Do not open it or share OTPs. Policy action: BLOCKED."
+                        </p>
+                        <button class="btn-primary" onclick="InformerVoice.speakEnglish('Guard AI Alert. Danger detected. The link imitates State Bank of India on a different domain. Do not open it or share OTPs, passwords, or UPI PINs. Policy action: BLOCKED.')">
+                            🔊 Speak English Voice
+                        </button>
+                    </div>
+
+                    <div class="glass-card" style="background:var(--bg-surface-elevated);">
+                        <h4 style="font-size:13px; margin-bottom:6px;">Sample Telugu Alert (తెలుగు హెచ్చరిక)</h4>
+                        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">
+                            "గార్డ్ ఏఐ హెచ్చరిక: తీవ్రమైన ప్రమాదం. ఈ లింక్ ప్రసిద్ధ భారతీయ బ్యాంక్ లేదా చెల్లింపు బ్రాండ్‌ను అనుకరిస్తోంది. ఈ లింక్‌ను తెరవకండి."
+                        </p>
+                        <button class="btn-primary" onclick="InformerVoice.speakTelugu('గార్డ్ ఏఐ హెచ్చరిక: తీవ్రమైన ప్రమాదం. ఈ లింక్ ప్రసిద్ధ భారతీయ బ్యాంక్ లేదా చెల్లింపు బ్రాండ్‌ను అనుకరిస్తోంది. ఈ లింక్‌ను తెరవకండి; OTP, పాస్‌వర్డ్ లేదా UPI PIN ఇవ్వకండి.')">
+                            🔊 Speak Telugu Voice
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 8: PLATFORM CAPABILITIES & LIMITATIONS -->
+        <!-- ============================================================== -->
+        <section id="view-platform" class="view-section">
+            <div class="grid-2">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h3 class="card-title">💻 Windows Integration</h3>
+                    </div>
+                    <ul style="font-size:12px; color:var(--text-secondary); line-height:1.7; padding-left:18px;">
+                        <li><strong>Windows Defender Integration:</strong> Direct CLI verification via <code>MpCmdRun.exe</code> when available.</li>
+                        <li><strong>Ephemeral Staging:</strong> Temporary chroot-isolated analysis folders destroyed upon sandbox teardown.</li>
+                        <li><strong>Egress Boundary:</strong> Anti-SSRF blocking of private subnets (RFC1918) and cloud metadata services.</li>
+                        <li><strong>Capabilities vs Limits:</strong> Guard AI does not replace kernel-level drivers; it provides application-layer orchestration and static sandbox isolation.</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h3 class="card-title">📱 Android Architecture</h3>
+                    </div>
+                    <ul style="font-size:12px; color:var(--text-secondary); line-height:1.7; padding-left:18px;">
+                        <li><strong>Sandboxed UID:</strong> Linux per-app UID isolation limits cross-app memory and storage access.</li>
+                        <li><strong>Hardware Keystore:</strong> AndroidKeyStore hardware-backed key protection for AES-GCM and Ed25519 primitives.</li>
+                        <li><strong>Accessibility / VPN Limits:</strong> Full URL inspection requires user-consented Accessibility Service or local VpnService loopback.</li>
+                        <li><strong>Compliance Note:</strong> An ordinary Android app cannot inspect arbitrary private storage without root or enterprise MDM.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/voice.js"></script>
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/emergency.js"></script>
+</body>
+</html>

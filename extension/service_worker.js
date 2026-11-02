@@ -3,6 +3,7 @@ import {
   DEFAULT_BACKEND_URL,
   PENDING_PREFIX,
   SETTINGS_KEY,
+  TOKEN_KEY,
   isWebUrl,
   normalizeBackendUrl
 } from "./config.js";
@@ -81,8 +82,9 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 });
 
 async function getBackendUrl() {
-  const stored = await chrome.storage.sync.get({ [SETTINGS_KEY]: DEFAULT_BACKEND_URL });
-  return normalizeBackendUrl(stored[SETTINGS_KEY]) || DEFAULT_BACKEND_URL;
+  const stored = await chrome.storage.sync.get({ [SETTINGS_KEY]: DEFAULT_BACKEND_URL, [TOKEN_KEY]: "" });
+  return { backendUrl: normalizeBackendUrl(stored[SETTINGS_KEY]) || DEFAULT_BACKEND_URL,
+    userToken: typeof stored[TOKEN_KEY] === "string" ? stored[TOKEN_KEY].trim().slice(0, 4096) : "" };
 }
 
 async function setBackendUrl(value) {
@@ -92,6 +94,12 @@ async function setBackendUrl(value) {
   }
   await chrome.storage.sync.set({ [SETTINGS_KEY]: normalized });
   return { ok: true, backendUrl: normalized };
+}
+
+async function setUserToken(value) {
+  if (typeof value !== "string" || value.length > 4096) return { ok: false, error: "Enter a valid user token." };
+  await chrome.storage.sync.set({ [TOKEN_KEY]: value.trim() });
+  return { ok: true };
 }
 
 async function getAllowedOrigins() {
@@ -113,11 +121,14 @@ async function handleMessage(message, sender) {
   }
 
   if (message?.type === "get-settings") {
-    return { ok: true, backendUrl: await getBackendUrl() };
+    return { ok: true, ...(await getBackendUrl()) };
   }
 
   if (message?.type === "set-settings") {
-    return setBackendUrl(message.backendUrl);
+    const backend = await setBackendUrl(message.backendUrl);
+    if (!backend.ok) return backend;
+    const savedToken = await setUserToken(message.userToken || "");
+    return savedToken.ok ? backend : savedToken;
   }
 
   if (message?.type === "is-careful-allowed") {
@@ -186,3 +197,29 @@ chrome.runtime.onInstalled.addListener(() => {
     return undefined;
   });
 });
+
+async function inspectDownload(item) {
+  if (!item?.url || !isWebUrl(item.url)) return;
+  try {
+    const settings = await getBackendUrl();
+    const response = await fetch(`${settings.backendUrl}/api/pipeline/event`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(settings.userToken ? { Authorization: `Bearer ${settings.userToken}` } : {}) },
+      body: JSON.stringify({ type: "download", value: item.url, source: "chrome_extension_download" }),
+      signal: AbortSignal.timeout(12_000)
+    });
+    const result = await response.json();
+    const risk = result?.risk || "Careful";
+    const detail = result?.error || `Static inspection: ${risk}. SafeNest does not execute downloads.`;
+    chrome.notifications?.create(`safenest-${item.id}`, {
+      type: "basic", iconUrl: "icons/icon128.png", title: `SafeNest download check: ${risk}`, message: String(detail).slice(0, 240)
+    });
+  } catch {
+    chrome.notifications?.create(`safenest-${item.id}`, {
+      type: "basic", iconUrl: "icons/icon128.png", title: "SafeNest could not inspect download",
+      message: "The download URL was not inspected. Check your backend connection."
+    });
+  }
+}
+
+chrome.downloads?.onCreated.addListener((item) => { void inspectDownload(item); });

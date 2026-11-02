@@ -1,5 +1,6 @@
 export const DEFAULT_BACKEND_URL = "http://127.0.0.1:8000";
 export const SETTINGS_KEY = "backendUrl";
+export const TOKEN_KEY = "userToken";
 export const CAREFUL_ALLOW_KEY = "carefulAllowedOrigins";
 export const PENDING_PREFIX = "pending:";
 

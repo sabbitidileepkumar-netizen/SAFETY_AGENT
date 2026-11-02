@@ -1,5 +1,5 @@
 import { DEFAULT_BACKEND_URL } from "./config.js";
-import { actionForRisk, normalizeCheckResult } from "./decision.js";
+import { normalizePipelineResult } from "./decision.js";
 
 const params = new URLSearchParams(globalThis.location.search);
 const token = params.get("token");
@@ -73,14 +73,7 @@ function renderWarning(result) {
     ? "Open anyway is a one-time override. Never enter an OTP, password, UPI PIN, or card details."
     : "";
   $("remember-row").classList.toggle("hidden", danger);
-  $("allow").textContent = danger ? "Open anyway" : "Allow";
-  $("allow").onclick = async () => {
-    if (!danger && $("remember").checked) {
-      await sendMessage({ type: "remember-careful", token });
-    }
-    window.speechSynthesis?.cancel();
-    await sendMessage({ type: "open-target", token });
-  };
+  $("allow").classList.add("hidden");
   $("close").onclick = async () => {
     window.speechSynthesis?.cancel();
     await sendMessage({ type: "close-target", token });
@@ -108,27 +101,34 @@ async function check() {
     const timeout = window.setTimeout(() => controller.abort(), 10_000);
     let result;
     try {
-      const response = await fetch(`${backendUrl}/check`, {
+      const response = await fetch(`${backendUrl}/api/pipeline/event`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: context.target }),
+        headers: { "Content-Type": "application/json", ...(settings.userToken ? { Authorization: `Bearer ${settings.userToken}` } : {}) },
+        body: JSON.stringify({ type: "link", value: context.target, source: "chrome_extension_navigation" }),
         signal: controller.signal
       });
       if (!response.ok) {
         throw new Error("The safety service returned an error.");
       }
-      result = normalizeCheckResult(await response.json());
+      result = normalizePipelineResult(await response.json());
     } catch {
       result = fallbackForUnavailableService();
     } finally {
       window.clearTimeout(timeout);
     }
 
-    const allowed = result.risk === "Careful"
-      ? Boolean((await sendMessage({ type: "is-careful-allowed", token }))?.allowed)
-      : false;
-    if (actionForRisk(result.risk, allowed) === "open") {
+    if (result.risk === "Safe") {
       await sendMessage({ type: "open-target", token });
+      return;
+    }
+    if (result.risk === "Careful") {
+      window.speechSynthesis?.cancel();
+      const viewer = new URL(chrome.runtime.getURL("isolation.html"));
+      viewer.searchParams.set("url", context.target);
+      viewer.searchParams.set("reason", result.mainReason);
+      viewer.searchParams.set("english", result.explanation.english);
+      viewer.searchParams.set("telugu", result.explanation.telugu);
+      window.location.replace(viewer.href);
       return;
     }
     renderWarning(result);

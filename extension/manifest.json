@@ -6,7 +6,9 @@
   "permissions": [
     "storage",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "downloads",
+    "notifications"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -16,7 +18,8 @@
     "type": "module"
   },
   "action": {
-    "default_title": "SafeNest Link Guard"
+    "default_title": "SafeNest Link Guard",
+    "default_icon": "icons/icon128.png"
   },
   "options_page": "options.html"
 }

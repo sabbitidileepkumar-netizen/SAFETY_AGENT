@@ -33,6 +33,22 @@ export function normalizeCheckResult(payload) {
   };
 }
 
+export function normalizePipelineResult(payload) {
+  if (!payload || !["link", "download", "wifi"].includes(payload.event_type) || !RISK_LEVELS.has(payload.risk) || !Array.isArray(payload.steps)) {
+    throw new Error("The safety service returned an invalid pipeline result.");
+  }
+  const informer = payload.steps.find((step) => step?.name === "informer")?.result || {};
+  const finder = payload.steps.find((step) => step?.name === "finder")?.result || {};
+  const normalized = normalizeCheckResult({
+    risk: payload.risk,
+    confidence: 0.5,
+    main_reason: finder.reason || payload.error || `Policy decision: ${payload.action || "hold"}.`,
+    signals: finder.signals || [],
+    explanation: { english: informer.english || "SafeNest checked this event.", telugu: informer.telugu || "సేఫ్‌నెస్ట్ ఈ అంశాన్ని తనిఖీ చేసింది.", source: "fallback" }
+  });
+  return { ...normalized, action: payload.action || "hold", viewerUrl: payload.viewer_url || null };
+}
+
 export function actionForRisk(risk, rememberedCareful = false) {
   if (risk === "Safe" || (risk === "Careful" && rememberedCareful)) {
     return "open";

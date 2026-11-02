@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { actionForRisk, normalizeCheckResult, normalizeOrigin } from "../decision.js";
+import { actionForRisk, normalizeCheckResult, normalizeOrigin, normalizePipelineResult } from "../decision.js";
 import { isWebUrl, normalizeBackendUrl } from "../config.js";
 
 test("risk actions preserve SafeNest behavior", () => {
@@ -42,4 +42,22 @@ test("extension accepts a valid backend result and rejects invalid risk", () => 
     () => normalizeCheckResult({ risk: "Unknown", main_reason: "bad" }),
     /invalid risk level/
   );
+});
+
+test("pipeline result maps bilingual explanation and action for the extension", () => {
+  const result = normalizePipelineResult({
+    event_type: "link", risk: "Careful", action: "isolate", viewer_url: "/api/isolation/render/iso-123",
+    steps: [
+      { name: "finder", result: { reason: "Unverified login page", signals: [] } },
+      { name: "informer", result: { english: "Pause before opening.", telugu: "తెరవడానికి ముందు ఆగండి." } }
+    ]
+  });
+  assert.equal(result.risk, "Careful");
+  assert.equal(result.action, "isolate");
+  assert.equal(result.viewerUrl, "/api/isolation/render/iso-123");
+  assert.equal(result.explanation.telugu, "తెరవడానికి ముందు ఆగండి.");
+});
+
+test("extension pipeline rejects malformed service results", () => {
+  assert.throws(() => normalizePipelineResult({ event_type: "link", risk: "Unknown", steps: [] }), /invalid pipeline result/);
 });

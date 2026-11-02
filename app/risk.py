@@ -12,6 +12,26 @@ from app.india_rules import (
     SUSPICIOUS_TLDS,
     URGENCY_PATTERNS,
 )
+
+
+# Common high-value brands added from the reference agent's typo-squat checks.
+# The India-specific mapping remains in india_rules.py.
+COMMON_BRAND_DOMAINS: dict[str, frozenset[str]] = {
+    "Google": frozenset({"google.com"}),
+    "Microsoft": frozenset({"microsoft.com"}),
+    "Apple": frozenset({"apple.com"}),
+    "Amazon": frozenset({"amazon.com"}),
+    "PayPal": frozenset({"paypal.com"}),
+    "Chase": frozenset({"chase.com"}),
+    "Wells Fargo": frozenset({"wellsfargo.com"}),
+    "Bank of America": frozenset({"bankofamerica.com"}),
+    "Netflix": frozenset({"netflix.com"}),
+    "GitHub": frozenset({"github.com"}),
+    "Facebook": frozenset({"facebook.com"}),
+    "Instagram": frozenset({"instagram.com"}),
+    "Twitter": frozenset({"twitter.com"}),
+    "Dropbox": frozenset({"dropbox.com"}),
+}
 from app.models import CheckResponse, Signal, RiskLevel
 
 
@@ -103,7 +123,7 @@ def _levenshtein(left: str, right: str) -> int:
 def _brand_lookalike(host: str) -> str | None:
     host = host.lower().rstrip(".")
     labels = host.split(".")
-    for brand, domains in BRAND_DOMAINS.items():
+    for brand, domains in (*BRAND_DOMAINS.items(), *COMMON_BRAND_DOMAINS.items()):
         if any(host == domain or host.endswith(f".{domain}") for domain in domains):
             continue
         token = brand.split("/")[0].split()[0].lower()

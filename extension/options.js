@@ -14,6 +14,7 @@ function sendMessage(message) {
 
 const form = document.getElementById("settings-form");
 const input = document.getElementById("backend-url");
+const tokenInput = document.getElementById("user-token");
 const status = document.getElementById("status");
 const clearButton = document.getElementById("clear-remembered");
 const clearStatus = document.getElementById("clear-status");
@@ -21,6 +22,7 @@ const clearStatus = document.getElementById("clear-status");
 sendMessage({ type: "get-settings" })
   .then((response) => {
     input.value = response?.backendUrl || DEFAULT_BACKEND_URL;
+    tokenInput.value = response?.userToken || "";
   })
   .catch(() => {
     input.value = DEFAULT_BACKEND_URL;
@@ -28,9 +30,10 @@ sendMessage({ type: "get-settings" })
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const response = await sendMessage({ type: "set-settings", backendUrl: input.value });
+  const response = await sendMessage({ type: "set-settings", backendUrl: input.value, userToken: tokenInput.value });
   if (response?.ok) {
     input.value = response.backendUrl;
+    tokenInput.value = "";
     status.textContent = "Saved.";
   } else {
     status.textContent = response?.error || "Could not save settings.";
